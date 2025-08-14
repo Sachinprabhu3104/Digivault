@@ -45,9 +45,10 @@ public class BankingController {
     }
 
     @PostMapping("/register")
-    public Users registerUser(@RequestBody Users user) {
-        return usersService.saveUser(user);
-    }
+    public ResponseEntity<Map<String, String>> registerUser(@RequestBody Users user) {
+    Map<String, String> credentials = usersService.saveUser(user);
+    return ResponseEntity.ok(credentials);
+}
 
     @PostMapping("/login")
     public Map<String, Object> loginUser(@RequestBody Map<String, String> loginRequest) {

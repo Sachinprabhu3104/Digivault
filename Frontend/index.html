@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="styles.css">
     <script>
         function registerUser() {
+            event.preventDefault();
             let first_name = document.getElementById("First_name").value;
             let last_name = document.getElementById("Last_name").value;
             let password = document.getElementById("Password").value;
@@ -37,16 +38,24 @@
                 body: JSON.stringify(user)
             })
                 .then(response => response.json())
-                .then(data => {
-                    // alert("User registered successfully!");
-                    document.getElementById("successPopup").style.display = "block";
-                    console.log(data);
-                })
-                .catch(error => {
-                    console.error("Error:", error);
-                    alert("Error registering user.");
-                });
+    .then(data => {
+        if (data.userId && data.password && data.accountNo) {
+            document.getElementById("popupMessage").innerHTML = `
+                <p><strong>User ID:</strong> ${data.userId}</p>
+                <p><strong>Password:</strong> ${data.password}</p>
+                <p><strong>Account Number:</strong> ${data.accountNo}</p>
+                <p>Please note these details safely.</p>
+            `;
+            document.getElementById("successPopup").style.display = "block";
+        } else {
+            alert("Registration failed. Please try again.");
         }
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        alert("Something went wrong during registration.");
+    });
+}
         function loginUser() {
             let userIdString = document.getElementById("user_id").value;
             let password = document.getElementById("password").value;
@@ -156,7 +165,7 @@
                 <!-- Register Form -->
                 <div id="registerForm" class="form-box hidden">
                     <h2>Register</h2>
-                    <form id="registerFormSubmit" onsubmit=" registerUser();">
+                    <form id="registerFormSubmit" onsubmit=" registerUser(event);">
                         <div class="row">
                             <input type="text" id="First_name" placeholder="First Name" required>
                             <input type="text" id="Last_name" placeholder="Last Name" required>
@@ -195,13 +204,13 @@
 
 
         <!-- Success Popup -->
-        <div id="successPopup" class="popup-container hidden">
-            <div class="popup-content">
-                <h2>Registration Successful 🎉</h2>
-                <p>Check your registered email for your User ID and Password.</p>
-                <button onclick="closePopup()">OK</button>
-            </div>
-        </div>
+<div id="successPopup" class="popup-container hidden">
+    <div class="popup-content">
+        <h2>Registration Successful 🎉</h2>
+        <div id="popupMessage"></div>    <!-- dynamic content will go here -->
+        <button onclick="document.getElementById('successPopup').style.display='none'">OK</button>
+    </div>
+</div>
 
         <!-- <p class="forgot-password" onclick="openForgotPopup()">Forgot Password?</p> -->
 
@@ -303,26 +312,10 @@
             } else if (!alphanumericRegex.test(password)) {
                 alert("Password must be less than 30 characters long and contain both letters and numbers.");
                 return;
+            
             }
-
-            document.getElementById("successPopup").style.display = "block";
-            setTimeout(function () {
-                window.location.href = "index.html";
-            }, 3000);
         });
 
-        function closePopup() {
-            document.getElementById("successPopup").style.display = "none";
-            window.location.href = "index.html";
-        }
-
-        // function validatePasswordInput(input) {
-        //     input.value = input.value.replace(/\D/g, '');
-        //     if (input.value.length > 30) {
-        //         input.value = input.value.slice(0, 30);
-        //     }
-        // }
     </script>
 </body>
-
 </html>

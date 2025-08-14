@@ -22,5 +22,26 @@ public class EmailService {
 
         mailSender.send(message);
     }
-}
 
+    // Registration email
+    public void sendRegistrationEmail(String toEmail, String userId, String tempPassword, String accountNo) {
+        String subject = "Welcome to DigiVault Banking System";
+
+        String body = "Dear " + userId + ",\n\n" +
+                      "Welcome to DigiVault Banking System!\n\n" +
+                      "Your account has been successfully created.\n" +
+                      "Account Number: " + accountNo + "\n" +
+                      "Temporary Password: " + tempPassword + "\n\n" +
+                      "Please log in and change your password immediately for security purposes.\n\n" +
+                      "Regards,\n" +
+                      "DigiVault Support Team";
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("sachinprabhu894@gmail.com");
+        message.setTo(toEmail);
+        message.setSubject(subject);
+        message.setText(body);
+
+        mailSender.send(message);
+    }
+}
